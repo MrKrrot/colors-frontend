@@ -61,7 +61,7 @@ const App = () => {
                             })
                     ) : (
                         <Row>
-                            <Column>Cargando...</Column>
+                            <Column>Loading...</Column>
                         </Row>
                     )}
                 </tbody>

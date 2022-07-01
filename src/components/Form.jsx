@@ -3,8 +3,8 @@ import styled from 'styled-components'
 export const Form = ({ handler }) => {
     return (
         <FormContainer>
-            <Input type='text' placeholder='Buscar color' onChange={handler} />
-            <Button>Buscar</Button>
+            <Input type='text' placeholder='Search name, hex or rgb' onChange={handler} />
+            <Button>Search</Button>
         </FormContainer>
     )
 }
