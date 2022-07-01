@@ -4,6 +4,11 @@ import { useApi } from './hooks/useApi'
 
 const App = () => {
     const [data, setData] = useState('')
+    const [query, setQuery] = useState('')
+
+    const handleQuery = e => {
+        setQuery(e.target.value.toLowerCase())
+    }
 
     const getData = async () => {
         const res = await useApi('http://localhost:5000/v1/colors')
@@ -17,7 +22,7 @@ const App = () => {
     return (
         <>
             <Form>
-                <Input type='text' placeholder='Buscar color' />
+                <Input type='text' placeholder='Buscar color' onChange={handleQuery} />
                 <Button>Buscar</Button>
             </Form>
             <Table>
@@ -32,22 +37,30 @@ const App = () => {
                 </thead>
                 <tbody>
                     {data ? (
-                        data.map(({ name, hex, rgb, families }) => {
-                            return (
-                                <Row key={name} color={hex}>
-                                    <Column>{name}</Column>
-                                    <Column>{hex}</Column>
-                                    <Column>{rgb}</Column>
-                                    <Column>
-                                        <ul>
-                                            {families.map(family => (
-                                                <li key={`${name}-${family}`}>{family}</li>
-                                            ))}
-                                        </ul>
-                                    </Column>
-                                </Row>
-                            )
-                        })
+                        data
+                            .filter(color => {
+                                return (
+                                    color.name.toLowerCase().includes(query) ||
+                                    color.hex.toLowerCase().includes(query) ||
+                                    color.rgb.toLowerCase().includes(query)
+                                )
+                            })
+                            .map(({ name, hex, rgb, families }) => {
+                                return (
+                                    <Row key={name} color={hex}>
+                                        <Column>{name}</Column>
+                                        <Column>{hex}</Column>
+                                        <Column>{rgb}</Column>
+                                        <Column>
+                                            <ul>
+                                                {families.map(family => (
+                                                    <li key={`${name}-${family}`}>{family}</li>
+                                                ))}
+                                            </ul>
+                                        </Column>
+                                    </Row>
+                                )
+                            })
                     ) : (
                         <Row>
                             <Column>Cargando...</Column>
