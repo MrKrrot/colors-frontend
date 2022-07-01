@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { Form } from './components/Form'
 import { useApi } from './hooks/useApi'
 
 const App = () => {
@@ -21,10 +22,7 @@ const App = () => {
 
     return (
         <>
-            <Form>
-                <Input type='text' placeholder='Buscar color' onChange={handleQuery} />
-                <Button>Buscar</Button>
-            </Form>
+            <Form handler={handleQuery} />
             <Table>
                 <Caption>Colors</Caption>
                 <thead>
@@ -71,35 +69,6 @@ const App = () => {
         </>
     )
 }
-
-const Form = styled.table`
-    margin: 2em auto;
-`
-
-const Input = styled.input`
-    width: 15em;
-    height: 2.5em;
-    font-size: 1em;
-    border: 2px solid #002244;
-    border-radius: 4px;
-    padding: 0.5em;
-`
-
-const Button = styled.button`
-    font-size: 1em;
-    margin-left: 1em;
-    background-color: #002244;
-    border: 1px solid #002244;
-    border-radius: 4px;
-    width: 6em;
-    height: 2.4em;
-    color: #fff;
-    cursor: pointer;
-    &:hover {
-        background-color: #fff;
-        color: #002244;
-    }
-`
 
 const Table = styled.table`
     margin: 2em auto;
