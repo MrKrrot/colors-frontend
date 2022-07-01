@@ -15,43 +15,78 @@ const App = () => {
     }, [])
 
     return (
-        <Table>
-            <Caption>Colors</Caption>
-            <thead>
-                <Row>
-                    <ColumnHead as='th'>Color Name</ColumnHead>
-                    <ColumnHead as='th'>Color Code HEX</ColumnHead>
-                    <ColumnHead as='th'>Color Code RGB</ColumnHead>
-                    <ColumnHead as='th'>Color Families</ColumnHead>
-                </Row>
-            </thead>
-            <tbody>
-                {data ? (
-                    data.map(({ name, hex, rgb, families }) => {
-                        return (
-                            <Row key={name} color={hex}>
-                                <Column>{name}</Column>
-                                <Column>{hex}</Column>
-                                <Column>{rgb}</Column>
-                                <Column>
-                                    <ul>
-                                        {families.map(family => (
-                                            <li key={`${name}-${family}`}>{family}</li>
-                                        ))}
-                                    </ul>
-                                </Column>
-                            </Row>
-                        )
-                    })
-                ) : (
+        <>
+            <Form>
+                <Input type='text' placeholder='Buscar color' />
+                <Button>Buscar</Button>
+            </Form>
+            <Table>
+                <Caption>Colors</Caption>
+                <thead>
                     <Row>
-                        <Column>Cargando...</Column>
+                        <ColumnHead as='th'>Color Name</ColumnHead>
+                        <ColumnHead as='th'>Color Code HEX</ColumnHead>
+                        <ColumnHead as='th'>Color Code RGB</ColumnHead>
+                        <ColumnHead as='th'>Color Families</ColumnHead>
                     </Row>
-                )}
-            </tbody>
-        </Table>
+                </thead>
+                <tbody>
+                    {data ? (
+                        data.map(({ name, hex, rgb, families }) => {
+                            return (
+                                <Row key={name} color={hex}>
+                                    <Column>{name}</Column>
+                                    <Column>{hex}</Column>
+                                    <Column>{rgb}</Column>
+                                    <Column>
+                                        <ul>
+                                            {families.map(family => (
+                                                <li key={`${name}-${family}`}>{family}</li>
+                                            ))}
+                                        </ul>
+                                    </Column>
+                                </Row>
+                            )
+                        })
+                    ) : (
+                        <Row>
+                            <Column>Cargando...</Column>
+                        </Row>
+                    )}
+                </tbody>
+            </Table>
+        </>
     )
 }
+
+const Form = styled.table`
+    margin: 2em auto;
+`
+
+const Input = styled.input`
+    width: 15em;
+    height: 2.5em;
+    font-size: 1em;
+    border: 2px solid #002244;
+    border-radius: 4px;
+    padding: 0.5em;
+`
+
+const Button = styled.button`
+    font-size: 1em;
+    margin-left: 1em;
+    background-color: #002244;
+    border: 1px solid #002244;
+    border-radius: 4px;
+    width: 6em;
+    height: 2.4em;
+    color: #fff;
+    cursor: pointer;
+    &:hover {
+        background-color: #fff;
+        color: #002244;
+    }
+`
 
 const Table = styled.table`
     margin: 2em auto;
