@@ -1,45 +1,84 @@
-import { useState } from 'react'
-import logo from './logo.svg'
-import './App.css'
+import { useEffect, useState } from 'react'
+import styled from 'styled-components'
+import { useApi } from './hooks/useApi'
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+    const [data, setData] = useState('')
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.jsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
-    </div>
-  )
+    const getData = async () => {
+        const res = await useApi('http://localhost:5000/v1/colors')
+        setData(res)
+    }
+
+    useEffect(() => {
+        getData()
+    }, [])
+
+    return (
+        <Table>
+            <Caption>Colors</Caption>
+            <thead>
+                <Row>
+                    <ColumnHead as='th'>Color Name</ColumnHead>
+                    <ColumnHead as='th'>Color Code HEX</ColumnHead>
+                    <ColumnHead as='th'>Color Code RGB</ColumnHead>
+                    <ColumnHead as='th'>Color Families</ColumnHead>
+                </Row>
+            </thead>
+            <tbody>
+                {data ? (
+                    data.map(({ name, hex, rgb, families }) => {
+                        return (
+                            <Row key={name} color={hex}>
+                                <Column>{name}</Column>
+                                <Column>{hex}</Column>
+                                <Column>{rgb}</Column>
+                                <Column>
+                                    <ul>
+                                        {families.map(family => (
+                                            <li key={`${name}-${family}`}>{family}</li>
+                                        ))}
+                                    </ul>
+                                </Column>
+                            </Row>
+                        )
+                    })
+                ) : (
+                    <Row>
+                        <Column>Cargando...</Column>
+                    </Row>
+                )}
+            </tbody>
+        </Table>
+    )
 }
+
+const Table = styled.table`
+    margin: 2em auto;
+    border: 2px solid #333;
+    border-collapse: collapse;
+`
+
+const Caption = styled.caption`
+    font-size: 2em;
+    font-weight: 700;
+`
+
+const Column = styled.td`
+    padding: 0.6em;
+    border-spacing: collapse;
+`
+
+const ColumnHead = styled(Column)`
+    font-size: 1.2em;
+    background-color: #333;
+    color: #fff;
+`
+
+const Row = styled.tr`
+    font-weight: 600;
+    background-color: ${props => props.color};
+    color: ${props => (props.color === '#000000' ? '#FFF' : '#000')};
+`
 
 export default App
